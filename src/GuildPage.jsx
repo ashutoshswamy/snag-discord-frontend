@@ -269,7 +269,7 @@ export default function GuildPage() {
         <div className="sidebar-header">
           <img src="/Logo.png" alt="Snag" className="sidebar-header-logo" />
           <div className="sidebar-logo">
-            SNAG <span className="sidebar-logo-dot" />
+            SNAG
           </div>
         </div>
 

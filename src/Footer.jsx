@@ -27,7 +27,7 @@ export default function Footer({ onDashboard }) {
               <a href="#features">Features</a>
               <RouterLink to="/commands">Commands</RouterLink>
               <a href="#how">How it works</a>
-              <a href="#preview">Preview</a>
+              <RouterLink to="/status">Status</RouterLink>
             </div>
             <div className="lp-footer-col">
               <p className="lp-footer-col-heading">Access</p>

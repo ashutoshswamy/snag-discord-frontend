@@ -1030,3 +1030,226 @@ a:hover { color: var(--primary-light); }
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ── CONNECT / LOADING SCREEN ── */
+.connect-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-dark);
+}
+
+.connect-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(139,92,246,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,92,246,0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 100%);
+  animation: connectGridDrift 12s linear infinite;
+}
+
+.connect-screen::after {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139,92,246,0.07) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: connectBreath 4s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.connect-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  animation: connectFadeIn 0.6s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.connect-logo-wrap {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.connect-logo-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid rgba(139,92,246,0.12);
+  animation: connectOrbitOuter 8s linear infinite;
+}
+
+.connect-logo-wrap::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary), 0 0 16px rgba(139,92,246,0.5);
+  top: -3px;
+  left: 50%;
+  transform-origin: 0 63px;
+  animation: connectOrbitOuter 8s linear infinite;
+}
+
+.connect-logo {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  position: relative;
+  z-index: 2;
+  animation: connectLogoPulse 3s ease-in-out infinite alternate;
+}
+
+.connect-spinner-ring {
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  border-top-color: var(--primary);
+  border-right-color: rgba(139,92,246,0.25);
+  animation: spin 0.9s linear infinite;
+}
+
+.connect-spinner-ring::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(139,92,246,0.08);
+  border-bottom-color: rgba(139,92,246,0.35);
+  animation: spin 1.6s linear infinite reverse;
+}
+
+.connect-brand {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 8px;
+  color: rgba(139,92,246,0.5);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  animation: connectFadeIn 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.connect-headline {
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  color: var(--text-1);
+  line-height: 1.1;
+  margin-bottom: 20px;
+  text-align: center;
+  animation: connectFadeIn 0.8s 0.3s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.connect-headline span {
+  color: var(--primary);
+  text-shadow: 0 0 32px rgba(139,92,246,0.4);
+}
+
+.connect-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-3);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  animation: connectFadeIn 0.8s 0.45s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.connect-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 6px var(--primary);
+  animation: connectStatusBlink 1.6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.connect-progress {
+  width: 200px;
+  height: 2px;
+  background: rgba(139,92,246,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 24px;
+  animation: connectFadeIn 0.8s 0.55s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.connect-progress-bar {
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  border-radius: 2px;
+  animation: connectProgressSweep 1.8s ease-in-out infinite;
+}
+
+.connect-dots::after {
+  content: '...';
+  animation: connectDotsCycle 1.4s steps(4, end) infinite;
+}
+
+@keyframes connectGridDrift {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 48px 48px, 48px 48px; }
+}
+
+@keyframes connectBreath {
+  from { opacity: 0.6; transform: translate(-50%,-50%) scale(0.9); }
+  to   { opacity: 1;   transform: translate(-50%,-50%) scale(1.1); }
+}
+
+@keyframes connectFadeIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes connectOrbitOuter {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes connectLogoPulse {
+  from { filter: drop-shadow(0 0 8px rgba(139,92,246,0.3)); }
+  to   { filter: drop-shadow(0 0 22px rgba(139,92,246,0.7)); }
+}
+
+@keyframes connectStatusBlink {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.3; }
+}
+
+@keyframes connectProgressSweep {
+  0%   { transform: translateX(-100%); }
+  60%  { transform: translateX(350%); }
+  100% { transform: translateX(350%); }
+}
+
+@keyframes connectDotsCycle {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}

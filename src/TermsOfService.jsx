@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import Footer from './Footer.jsx';
 import './Landing.css';
 import './Legal.css';
 
@@ -325,20 +326,7 @@ export default function TermsOfService() {
         </div>
       </div>
 
-      {/* ── FOOTER ── */}
-      <footer className="legal-footer">
-        <div className="lp-container">
-          <div className="legal-footer-inner">
-            <div className="legal-footer-links">
-              <RouterLink to="/">Home</RouterLink>
-              <RouterLink to="/commands">Commands</RouterLink>
-              <RouterLink to="/privacy">Privacy Policy</RouterLink>
-              <a href="https://github.com/ashutoshswamy" target="_blank" rel="noreferrer">GitHub</a>
-            </div>
-            <p className="legal-footer-copy">© 2026 Snag Bot. Built for Discord communities.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );
