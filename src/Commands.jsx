@@ -101,8 +101,14 @@ export default function Commands() {
 
   useEffect(() => {
     document.title = 'Commands — Snag Bot';
+    const meta = document.querySelector('meta[name="description"]');
+    const prev = meta?.getAttribute('content');
+    if (meta) meta.setAttribute('content', 'Browse all Snag Discord bot slash commands. Includes giveaway start, instant drops, reroll winners, and management commands.');
     window.scrollTo({ top: 0, behavior: 'instant' });
-    return () => { document.title = 'Snag Bot — Modern Discord Giveaways'; };
+    return () => {
+      document.title = 'Snag — Free Discord Giveaway Bot';
+      if (meta && prev) meta.setAttribute('content', prev);
+    };
   }, []);
 
   useEffect(() => {

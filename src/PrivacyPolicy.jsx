@@ -23,9 +23,15 @@ export default function PrivacyPolicy() {
 
   useEffect(() => {
     document.title = 'Privacy Policy — Snag Bot';
+    const meta = document.querySelector('meta[name="description"]');
+    const prev = meta?.getAttribute('content');
+    if (meta) meta.setAttribute('content', 'Read the Snag Bot privacy policy. Learn how we handle your Discord data and protect your privacy.');
     const onScroll = () => setScrolled(window.scrollY > 36);
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      if (meta && prev) meta.setAttribute('content', prev);
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
 
   return (

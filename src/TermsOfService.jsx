@@ -24,9 +24,15 @@ export default function TermsOfService() {
 
   useEffect(() => {
     document.title = 'Terms of Service — Snag Bot';
+    const meta = document.querySelector('meta[name="description"]');
+    const prev = meta?.getAttribute('content');
+    if (meta) meta.setAttribute('content', 'Read the Snag Bot terms of service. Understand the rules and conditions for using Snag in your Discord server.');
     const onScroll = () => setScrolled(window.scrollY > 36);
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      if (meta && prev) meta.setAttribute('content', prev);
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
 
   return (

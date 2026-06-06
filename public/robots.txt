@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /dashboard/
+
+Sitemap: https://snagbot.ashutoshswamy.in/sitemap.xml

@@ -120,7 +120,7 @@ export default function Landing() {
   const [activePreview, setActivePreview] = useState('giveaways');
 
   useEffect(() => {
-    document.title = 'Snag Bot — Modern Discord Giveaways';
+    document.title = 'Snag — Free Discord Giveaway Bot';
   }, []);
 
   useEffect(() => {
