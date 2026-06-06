@@ -142,7 +142,7 @@ export default function Landing() {
     if (user) {
       navigate('/dashboard');
     } else {
-      window.location.href = '/api/auth/discord';
+      window.location.href = `${import.meta.env.VITE_API_URL}/auth/discord`;
     }
   };
 
