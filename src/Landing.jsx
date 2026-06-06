@@ -327,9 +327,13 @@ export default function Landing() {
 
           <nav className="lp-nav-links">
             <a href="#features">Features</a>
-            <RouterLink to="/commands">Commands</RouterLink>
             <a href="#how">How it works</a>
             <a href="#preview">Preview</a>
+            <RouterLink to="/commands">Commands</RouterLink>
+            <RouterLink to="/status" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+              <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#00e676', display: 'inline-block', boxShadow: '0 0 6px #00e676' }} />
+              Status
+            </RouterLink>
           </nav>
 
           <div className="lp-nav-ctas">
@@ -356,9 +360,13 @@ export default function Landing() {
         {mobileMenuOpen && (
           <div className="lp-mobile-menu">
             <a href="#features" onClick={() => setMobileMenuOpen(false)}>Features</a>
-            <RouterLink to="/commands" onClick={() => setMobileMenuOpen(false)}>Commands</RouterLink>
             <a href="#how" onClick={() => setMobileMenuOpen(false)}>How it works</a>
             <a href="#preview" onClick={() => setMobileMenuOpen(false)}>Preview</a>
+            <RouterLink to="/commands" onClick={() => setMobileMenuOpen(false)}>Commands</RouterLink>
+            <RouterLink to="/status" onClick={() => setMobileMenuOpen(false)} style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+              <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#00e676', display: 'inline-block', boxShadow: '0 0 6px #00e676' }} />
+              Status
+            </RouterLink>
             <a
               href={inviteUrl}
               target="_blank"
