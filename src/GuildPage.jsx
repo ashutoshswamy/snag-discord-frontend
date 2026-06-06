@@ -8,6 +8,7 @@ import {
   BookOpen, Gift, Hash
 } from 'lucide-react';
 import GiveawayCard from './GiveawayCard.jsx';
+import './Commands.css';
 
 function Toast({ toast }) {
   if (!toast) return null;
@@ -479,14 +480,6 @@ export default function GuildPage() {
                   <p className="text-sm font-light leading-relaxed mb-6" style={{ color: 'var(--text-secondary)' }}>
                     Welcome to the SNAG Server Panel! Here you can create and manage giveaways and instant drop drawings for your community. Switch between sidebar tabs to view drawing logs, telemetry charts, or settings.
                   </p>
-                  <div className="flex gap-3 flex-wrap">
-                    <button className="btn btn-primary" onClick={() => { setModalType('giveaway'); setShowModal(true); }}>
-                      <Gift size={14} /> Timed Giveaway
-                    </button>
-                    <button className="btn" style={{ background: 'var(--warning-glow)', color: 'var(--warning)', border: '1px solid rgba(234,179,8,0.25)' }} onClick={() => { setModalType('drop'); setShowModal(true); }}>
-                      <Zap size={14} /> Instant Drop
-                    </button>
-                  </div>
                 </div>
               </div>
 
@@ -1028,47 +1021,70 @@ export default function GuildPage() {
 
       {/* Reset Server Data Modal */}
       {showResetModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }} onClick={() => setShowResetModal(false)}>
-          <div style={{ background: 'var(--bg-secondary)', border: '1px solid rgba(255,23,68,0.35)', borderRadius: '14px', padding: '28px', width: '440px', maxWidth: '94vw' }} onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,23,68,0.12)', border: '1px solid rgba(255,23,68,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <Trash2 size={17} style={{ color: 'var(--danger)' }} />
+        <div className="cmd-modal-overlay" onClick={() => setShowResetModal(false)}>
+          <div className="cmd-modal" style={{ '--modal-color': '#ff1744' }} onClick={e => e.stopPropagation()}>
+            {/* Titlebar */}
+            <div className="cmd-modal-titlebar">
+              <div className="cmd-modal-dots">
+                <span className="cmd-dot cmd-dot-r" onClick={() => setShowResetModal(false)} title="Close" />
+                <span className="cmd-dot cmd-dot-y" />
+                <span className="cmd-dot cmd-dot-g" />
               </div>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: '15px' }}>Reset Server Data</div>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{guild?.name || guildId}</div>
+              <span className="cmd-modal-titlebar-label">Snag Dashboard — Reset Server Data</span>
+              <button className="cmd-modal-close" onClick={() => setShowResetModal(false)}><X size={13} /></button>
+            </div>
+
+            {/* Body */}
+            <div className="cmd-modal-body">
+              {/* Info panel */}
+              <div className="cmd-modal-panel">
+                <div className="cmd-modal-panel-title">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <Trash2 size={15} style={{ color: 'var(--danger)', flexShrink: 0 }} />
+                    <code className="cmd-modal-cmd-name" style={{ color: 'var(--danger)' }}>Reset Server Data</code>
+                  </div>
+                  <span className="cmd-badge cmd-badge-admin">DANGER</span>
+                </div>
+                <p className="cmd-modal-desc">{guild?.name || guildId} — permanently deletes all bot data for this server including giveaways, entries, and settings.</p>
               </div>
-            </div>
 
-            <div style={{ background: 'rgba(255,23,68,0.06)', border: '1px solid rgba(255,23,68,0.2)', borderRadius: '8px', padding: '12px 14px', marginBottom: '20px', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
-              <strong style={{ color: 'var(--danger)' }}>This action is irreversible.</strong> All bot data for this server will be permanently deleted — including all giveaways, entries, and settings.
-            </div>
+              {/* Warning panel */}
+              <div className="cmd-modal-panel" style={{ borderColor: 'rgba(255,23,68,0.2)', background: 'rgba(255,23,68,0.05)' }}>
+                <div className="cmd-modal-section-label" style={{ color: 'var(--danger)' }}>WARNING</div>
+                <p className="cmd-modal-desc">
+                  <strong style={{ color: 'var(--danger)' }}>This action is irreversible.</strong> All bot data for this server will be permanently deleted — including all giveaways, entries, and settings.
+                </p>
+              </div>
 
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
-                Type <strong style={{ color: 'var(--danger)', fontFamily: 'monospace' }}>RESET</strong> to confirm
-              </label>
-              <input
-                className="form-input"
-                type="text"
-                placeholder="RESET"
-                value={resetConfirmText}
-                onChange={e => setResetConfirmText(e.target.value)}
-                style={{ width: '100%', borderColor: resetConfirmText === 'RESET' ? 'rgba(255,23,68,0.5)' : undefined }}
-                autoFocus
-              />
-            </div>
+              {/* Confirm input panel */}
+              <div className="cmd-modal-panel">
+                <div className="cmd-modal-section-label">CONFIRM ACTION</div>
+                <label style={{ fontSize: '12px', color: 'var(--cmd-sub)', display: 'block', marginBottom: '8px' }}>
+                  Type <code style={{ color: 'var(--danger)', fontFamily: 'var(--cmd-mono)', fontSize: '12px' }}>RESET</code> to confirm
+                </label>
+                <input
+                  className="form-input"
+                  type="text"
+                  placeholder="RESET"
+                  value={resetConfirmText}
+                  onChange={e => setResetConfirmText(e.target.value)}
+                  style={{ width: '100%', borderColor: resetConfirmText === 'RESET' ? 'rgba(255,23,68,0.5)' : undefined }}
+                  autoFocus
+                />
+              </div>
 
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button className="btn btn-secondary" style={{ flex: 1 }} onClick={() => setShowResetModal(false)}>Cancel</button>
-              <button
-                className="btn btn-danger"
-                style={{ flex: 1, opacity: resetConfirmText === 'RESET' ? 1 : 0.4 }}
-                disabled={resetConfirmText !== 'RESET' || resetLoading}
-                onClick={resetServer}
-              >
-                {resetLoading ? 'Resetting…' : 'Reset All Data'}
-              </button>
+              {/* Actions */}
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button className="btn btn-secondary" style={{ flex: 1 }} onClick={() => setShowResetModal(false)}>Cancel</button>
+                <button
+                  className="btn btn-danger"
+                  style={{ flex: 1, opacity: resetConfirmText === 'RESET' ? 1 : 0.4 }}
+                  disabled={resetConfirmText !== 'RESET' || resetLoading}
+                  onClick={resetServer}
+                >
+                  {resetLoading ? 'Resetting…' : 'Reset All Data'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
