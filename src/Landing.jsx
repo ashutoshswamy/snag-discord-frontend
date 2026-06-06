@@ -133,7 +133,7 @@ export default function Landing() {
 
   const error = new URLSearchParams(window.location.search).get('error');
 
-  const inviteUrl = "https://discord.com/oauth2/authorize";
+  const inviteUrl = "https://discord.com/oauth2/authorize?client_id=1512527196437352549&permissions=8&scope=bot%20applications.commands";
   const ORBIT_RADIUS = 155;
   const ORBIT_CENTER = 190;
   const ICON_HALF = 22;

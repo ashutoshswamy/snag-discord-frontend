@@ -2,7 +2,7 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 export default function Footer({ onDashboard }) {
-  const inviteUrl = "https://discord.com/oauth2/authorize";
+  const inviteUrl = "https://discord.com/oauth2/authorize?client_id=1512527196437352549&permissions=8&scope=bot%20applications.commands";
 
   return (
     <footer className="lp-footer">
