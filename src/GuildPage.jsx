@@ -47,6 +47,11 @@ export default function GuildPage() {
   const [channelsLoading, setChannelsLoading] = useState(true);
   const [channelsError, setChannelsError] = useState(null);
 
+  // Roles state
+  const [roles, setRoles] = useState([]);
+  const [rolesLoading, setRolesLoading] = useState(true);
+  const [rolesError, setRolesError] = useState(null);
+
   // Launch Giveaway form state
   const [giveawayForm, setGiveawayForm] = useState({
     channelId: '',
@@ -90,12 +95,14 @@ export default function GuildPage() {
   const fetchData = useCallback(() => {
     setRefreshing(true);
     setChannelsLoading(true);
+    setRolesLoading(true);
     Promise.all([
       fetch(`${import.meta.env.VITE_API_URL}/guilds`, { credentials: 'include' }).then(r => r.json()),
       fetch(`${import.meta.env.VITE_API_URL}/giveaways?guildId=${guildId}`, { credentials: 'include' }).then(r => r.json()),
       fetch(`${import.meta.env.VITE_API_URL}/channels/${guildId}`, { credentials: 'include' }).then(r => r.json()),
       fetch(`${import.meta.env.VITE_API_URL}/settings/${guildId}`, { credentials: 'include' }).then(r => r.json()),
-    ]).then(([guildsData, giveawaysData, channelsData, settingsData]) => {
+      fetch(`${import.meta.env.VITE_API_URL}/roles/${guildId}`, { credentials: 'include' }).then(r => r.json()),
+    ]).then(([guildsData, giveawaysData, channelsData, settingsData, rolesData]) => {
       if (!Array.isArray(guildsData)) { navigate('/dashboard'); return; }
       setGuilds(guildsData);
       const found = guildsData.find(g => g.id === guildId);
@@ -108,6 +115,12 @@ export default function GuildPage() {
       } else {
         setChannelsError(channelsData.error ?? 'Failed to load channels');
       }
+      if (Array.isArray(rolesData)) {
+        setRoles(rolesData);
+        setRolesError(null);
+      } else {
+        setRolesError(rolesData.error ?? 'Failed to load roles');
+      }
       if (settingsData && !settingsData.error) {
         setSettingsForm(settingsData);
       }
@@ -116,6 +129,7 @@ export default function GuildPage() {
         setLoading(false);
         setRefreshing(false);
         setChannelsLoading(false);
+        setRolesLoading(false);
       });
   }, [guildId, navigate]);
 
@@ -890,13 +904,24 @@ export default function GuildPage() {
                   <label className="flex items-center gap-1.5 mb-1.5">
                     <Shield size={11} /> Manager Role
                   </label>
-                  <input
-                    type="text"
-                    className="form-input"
-                    value={settingsForm.managerRole}
-                    onChange={e => setSettingsForm(prev => ({ ...prev, managerRole: e.target.value }))}
-                    required
-                  />
+                  {rolesLoading ? (
+                    <div className="form-input flex items-center gap-2" style={{ color: 'var(--text-muted)' }}>
+                      <Loader2 size={12} className="animate-spin" /> Loading roles…
+                    </div>
+                  ) : rolesError ? (
+                    <div className="form-input text-xs text-red-400 border-red-500/20 bg-red-500/5">{rolesError}</div>
+                  ) : (
+                    <select
+                      className="form-select"
+                      value={settingsForm.managerRole}
+                      onChange={e => setSettingsForm(prev => ({ ...prev, managerRole: e.target.value }))}
+                    >
+                      <option value="">Select a role…</option>
+                      {roles.map(r => (
+                        <option key={r.id} value={r.id}>{r.name}</option>
+                      ))}
+                    </select>
+                  )}
                   <p className="text-[10px] text-white/40 mt-1">Users with this role can run creation/ended commands.</p>
                 </div>
 
@@ -904,13 +929,24 @@ export default function GuildPage() {
                   <label className="flex items-center gap-1.5 mb-1.5">
                     <Inbox size={11} /> Default Logging Channel
                   </label>
-                  <input
-                    type="text"
-                    className="form-input"
-                    value={settingsForm.logsChannel}
-                    onChange={e => setSettingsForm(prev => ({ ...prev, logsChannel: e.target.value }))}
-                    required
-                  />
+                  {channelsLoading ? (
+                    <div className="form-input flex items-center gap-2" style={{ color: 'var(--text-muted)' }}>
+                      <Loader2 size={12} className="animate-spin" /> Loading channels…
+                    </div>
+                  ) : channelsError ? (
+                    <div className="form-input text-xs text-red-400 border-red-500/20 bg-red-500/5">{channelsError}</div>
+                  ) : (
+                    <select
+                      className="form-select"
+                      value={settingsForm.logsChannel}
+                      onChange={e => setSettingsForm(prev => ({ ...prev, logsChannel: e.target.value }))}
+                    >
+                      <option value="">Select a channel…</option>
+                      {channels.map(c => (
+                        <option key={c.id} value={c.id}>#{c.name}</option>
+                      ))}
+                    </select>
+                  )}
                   <p className="text-[10px] text-white/40 mt-1">Channel where winner rerolls and logs will be posted by default.</p>
                 </div>
 

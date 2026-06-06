@@ -54,7 +54,7 @@ export default function Navbar() {
               onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-2)'; e.currentTarget.style.borderColor = 'var(--border-2)'; }}
             >
               <LogOut size={13} />
-              Sign out
+              Logout
             </button>
           </div>
         )}

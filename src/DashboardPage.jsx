@@ -81,7 +81,7 @@ export default function DashboardPage() {
 
       <div style={{ marginTop: '40px', display: 'flex', justifyContent: 'center' }}>
         <button className="btn btn-secondary" onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <LogOut size={14} /> Sign out
+          <LogOut size={14} /> Logout
         </button>
       </div>
     </div>
