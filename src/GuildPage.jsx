@@ -758,8 +758,8 @@ export default function GuildPage() {
             const totalGiveawaysCount = giveaways.filter(g => !g.is_drop).length;
             const totalDropsCount = giveaways.filter(g => g.is_drop).length;
             const totalCount = totalGiveawaysCount + totalDropsCount;
-            const giveawaysPct = totalCount > 0 ? Math.round((totalGiveawaysCount / totalCount) * 100) : 50;
-            const dropsPct = totalCount > 0 ? 100 - giveawaysPct : 50;
+            const giveawaysPct = totalCount > 0 ? Math.round((totalGiveawaysCount / totalCount) * 100) : 0;
+            const dropsPct = totalCount > 0 ? 100 - giveawaysPct : 0;
 
             const hourlyBuckets = [0, 0, 0, 0, 0, 0];
             giveaways.forEach(g => {
@@ -769,13 +769,14 @@ export default function GuildPage() {
               hourlyBuckets[idx] += (g.entryCount || 0);
             });
             const maxBucket = Math.max(...hourlyBuckets, 1);
+            const hasAnyEntries = hourlyBuckets.some(b => b > 0);
             const peakChartData = [
-              { time: '12 AM', val: Math.round((hourlyBuckets[0] / maxBucket) * 100) || 5, color: 'var(--primary-dim)' },
-              { time: '4 AM', val: Math.round((hourlyBuckets[1] / maxBucket) * 100) || 5, color: 'var(--primary-dim)' },
-              { time: '8 AM', val: Math.round((hourlyBuckets[2] / maxBucket) * 100) || 5, color: 'var(--primary)' },
-              { time: '12 PM', val: Math.round((hourlyBuckets[3] / maxBucket) * 100) || 5, color: 'var(--primary)' },
-              { time: '4 PM', val: Math.round((hourlyBuckets[4] / maxBucket) * 100) || 5, color: 'var(--primary)' },
-              { time: '8 PM', val: Math.round((hourlyBuckets[5] / maxBucket) * 100) || 5, color: 'var(--primary-hover)' },
+              { time: '12 AM', val: Math.round((hourlyBuckets[0] / maxBucket) * 100), color: 'var(--primary-dim)' },
+              { time: '4 AM', val: Math.round((hourlyBuckets[1] / maxBucket) * 100), color: 'var(--primary-dim)' },
+              { time: '8 AM', val: Math.round((hourlyBuckets[2] / maxBucket) * 100), color: 'var(--primary)' },
+              { time: '12 PM', val: Math.round((hourlyBuckets[3] / maxBucket) * 100), color: 'var(--primary)' },
+              { time: '4 PM', val: Math.round((hourlyBuckets[4] / maxBucket) * 100), color: 'var(--primary)' },
+              { time: '8 PM', val: Math.round((hourlyBuckets[5] / maxBucket) * 100), color: 'var(--primary-hover)' },
             ];
 
             return (
@@ -784,46 +785,58 @@ export default function GuildPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <div className="glass-panel p-6 flex flex-col gap-4 lg:col-span-2">
                     <h3 className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>Hourly Entry Peaks</h3>
-                    
-                    {/* Glowing pure CSS bar chart */}
-                    <div className="flex items-end justify-between h-[180px] pt-6 pb-2 px-4 border-b border-white/5">
-                      {peakChartData.map(({ time, val, color }) => (
-                        <div key={time} className="flex flex-col items-center gap-2 w-12 group">
-                          <div className="w-full rounded-t-md transition-all duration-300 relative"
-                            style={{
-                              height: `${val * 1.3}px`,
-                              background: `linear-gradient(0deg, var(--primary) 0%, ${color} 100%)`,
-                              boxShadow: `0 0 16px ${color}33`,
-                            }}
-                          >
-                            <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-black text-white opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-1.5 py-0.5 rounded">
-                              {val}%
+
+                    {!hasAnyEntries ? (
+                      <div className="flex items-center justify-center h-[180px]">
+                        <p className="text-xs italic" style={{ color: 'var(--text-muted)' }}>No entry data recorded yet.</p>
+                      </div>
+                    ) : (
+                      /* Glowing pure CSS bar chart */
+                      <div className="flex items-end justify-between h-[180px] pt-6 pb-2 px-4 border-b border-white/5">
+                        {peakChartData.map(({ time, val, color }) => (
+                          <div key={time} className="flex flex-col items-center gap-2 w-12 group">
+                            <div className="w-full rounded-t-md transition-all duration-300 relative"
+                              style={{
+                                height: `${val * 1.3}px`,
+                                background: `linear-gradient(0deg, var(--primary) 0%, ${color} 100%)`,
+                                boxShadow: `0 0 16px ${color}33`,
+                              }}
+                            >
+                              <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-black text-white opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-1.5 py-0.5 rounded">
+                                {val}%
+                              </div>
                             </div>
+                            <span className="text-[10px] text-white/40">{time}</span>
                           </div>
-                          <span className="text-[10px] text-white/40">{time}</span>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   <div className="glass-panel p-6 flex flex-col gap-4">
                     <h3 className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>Participation Rate</h3>
-                    <div className="flex flex-col gap-3 justify-center h-full">
-                      {[
-                        { label: 'Timed Giveaways', val: giveawaysPct, color: 'var(--primary)' },
-                        { label: 'Instant Drops', val: dropsPct, color: 'var(--warning)' },
-                      ].map(({ label, val, color }) => (
-                        <div key={label} className="flex flex-col gap-1.5">
-                          <div className="flex justify-between text-xs font-semibold">
-                            <span style={{ color: 'var(--text-secondary)' }}>{label}</span>
-                            <span style={{ color }}>{val}%</span>
+                    {totalCount === 0 ? (
+                      <div className="flex items-center justify-center h-full py-6">
+                        <p className="text-xs italic" style={{ color: 'var(--text-muted)' }}>No giveaways recorded yet.</p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-3 justify-center h-full">
+                        {[
+                          { label: 'Timed Giveaways', val: giveawaysPct, color: 'var(--primary)' },
+                          { label: 'Instant Drops', val: dropsPct, color: 'var(--warning)' },
+                        ].map(({ label, val, color }) => (
+                          <div key={label} className="flex flex-col gap-1.5">
+                            <div className="flex justify-between text-xs font-semibold">
+                              <span style={{ color: 'var(--text-secondary)' }}>{label}</span>
+                              <span style={{ color }}>{val}%</span>
+                            </div>
+                            <div className="w-full h-2 rounded bg-black/40 overflow-hidden">
+                              <div className="h-full rounded" style={{ width: `${val}%`, background: color, boxShadow: `0 0 8px ${color}` }} />
+                            </div>
                           </div>
-                          <div className="w-full h-2 rounded bg-black/40 overflow-hidden">
-                            <div className="h-full rounded" style={{ width: `${val}%`, background: color, boxShadow: `0 0 8px ${color}` }} />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
