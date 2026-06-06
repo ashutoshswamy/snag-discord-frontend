@@ -37,6 +37,7 @@ export default function GuildPage() {
   const [giveaways, setGiveaways] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [autoRefreshSecs, setAutoRefreshSecs] = useState(30);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showGuildDropdown, setShowGuildDropdown] = useState(false);
   const [toast, setToast] = useState(null);
@@ -121,6 +122,15 @@ export default function GuildPage() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    setAutoRefreshSecs(30);
+    const countdown = setInterval(() => {
+      setAutoRefreshSecs(s => (s <= 1 ? 30 : s - 1));
+    }, 1000);
+    const refresh = setInterval(() => { fetchData(); }, 30000);
+    return () => { clearInterval(countdown); clearInterval(refresh); };
+  }, [guildId, fetchData]);
 
   // Pre-select first channel
   useEffect(() => {
@@ -402,8 +412,9 @@ export default function GuildPage() {
             </h1>
           </div>
           <div className="header-actions">
-            <button className="btn btn-secondary" onClick={fetchData} disabled={refreshing}>
-              <RefreshCw size={13} className={refreshing ? 'animate-spin' : ''} /> Refresh
+            <button className="btn btn-secondary" onClick={() => { fetchData(); setAutoRefreshSecs(30); }} disabled={refreshing}>
+              <RefreshCw size={13} className={refreshing ? 'animate-spin' : ''} />
+              {refreshing ? 'Refreshing…' : `${autoRefreshSecs}s`}
             </button>
           </div>
         </header>
@@ -909,8 +920,8 @@ export default function GuildPage() {
                   </label>
                   <div className="flex gap-2">
                     {[
-                      { color: '#8b5cf6', name: 'Snag Blue' },
                       { color: '#8b5cf6', name: 'Violet' },
+                      { color: '#3b9dff', name: 'Blue' },
                       { color: '#00e676', name: 'Mint Green' },
                       { color: '#ff9100', name: 'Amber' }
                     ].map(x => (

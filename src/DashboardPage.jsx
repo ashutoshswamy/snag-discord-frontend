@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Server, AlertCircle, LogOut } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Server, AlertCircle, LogOut, RefreshCw } from 'lucide-react';
 import { useAuth } from './App.jsx';
 import { useNavigate } from 'react-router-dom';
 import GuildCard from './GuildCard.jsx';
@@ -10,8 +10,11 @@ export default function DashboardPage() {
   const [guilds, setGuilds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [autoRefreshSecs, setAutoRefreshSecs] = useState(30);
 
-  useEffect(() => {
+  const fetchGuilds = useCallback(() => {
+    setLoading(true);
+    setError(null);
     fetch(`${import.meta.env.VITE_API_URL}/guilds`, { credentials: 'include' })
       .then(r => r.json())
       .then(data => {
@@ -21,6 +24,17 @@ export default function DashboardPage() {
       .catch(() => setError('Network error'))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => { fetchGuilds(); }, [fetchGuilds]);
+
+  useEffect(() => {
+    setAutoRefreshSecs(30);
+    const countdown = setInterval(() => {
+      setAutoRefreshSecs(s => (s <= 1 ? 30 : s - 1));
+    }, 1000);
+    const refresh = setInterval(() => { fetchGuilds(); }, 30000);
+    return () => { clearInterval(countdown); clearInterval(refresh); };
+  }, [fetchGuilds]);
 
   async function handleLogout() {
     await logout();
@@ -40,9 +54,15 @@ export default function DashboardPage() {
   return (
     <div className="selection-container">
       {/* Header */}
-      <div className="selection-header">
-        <h1>Select Server</h1>
-        <p>Choose which Discord server you want to manage giveaways for</p>
+      <div className="selection-header" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+        <div>
+          <h1>Select Server</h1>
+          <p>Choose which Discord server you want to manage giveaways for</p>
+        </div>
+        <button className="btn btn-secondary" onClick={() => { fetchGuilds(); setAutoRefreshSecs(30); }} disabled={loading} style={{ flexShrink: 0 }}>
+          <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
+          {loading ? 'Loading…' : `${autoRefreshSecs}s`}
+        </button>
       </div>
 
       {error ? (
@@ -52,8 +72,8 @@ export default function DashboardPage() {
           </div>
           <h2 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>Failed to Load</h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '24px' }}>{error}</p>
-          <button className="btn btn-secondary" onClick={() => window.location.reload()}>
-            Retry
+          <button className="btn btn-secondary" onClick={() => { fetchGuilds(); setAutoRefreshSecs(30); }}>
+            <RefreshCw size={13} /> Retry
           </button>
         </div>
       ) : guilds.length === 0 ? (
