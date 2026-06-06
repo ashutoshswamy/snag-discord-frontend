@@ -75,7 +75,7 @@ export default function DashboardPage() {
         </div>
       ) : (
         <div className="guild-grid">
-          {guilds.map((guild) => (
+          {[...guilds].sort((a, b) => (b.hasBot ? 1 : 0) - (a.hasBot ? 1 : 0)).map((guild) => (
             <GuildCard key={guild.id} guild={guild} />
           ))}
         </div>
