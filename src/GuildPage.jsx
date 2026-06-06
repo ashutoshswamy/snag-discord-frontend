@@ -68,6 +68,11 @@ export default function GuildPage() {
   const [activeSidebarTab, setActiveSidebarTab] = useState('overview'); // overview, giveaways, drops, analytics, settings
   const [activeSubTab, setActiveSubTab] = useState('active'); // active, history
 
+  // Reset server state
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [resetConfirmText, setResetConfirmText] = useState('');
+  const [resetLoading, setResetLoading] = useState(false);
+
   // Mock settings state
   const [settingsForm, setSettingsForm] = useState({
     managerRole: '@Giveaway Manager',
@@ -211,6 +216,26 @@ export default function GuildPage() {
     setShowGuildDropdown(false);
     setLoading(true);
     navigate(`/dashboard/${id}`);
+  };
+
+  const resetServer = async () => {
+    setResetLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/reset/${guildId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Reset failed');
+      setShowResetModal(false);
+      setResetConfirmText('');
+      setGiveaways([]);
+      showToast('Server data has been reset.');
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      setResetLoading(false);
+    }
   };
 
   const saveSettings = async (e) => {
@@ -914,11 +939,80 @@ export default function GuildPage() {
                   Save Configuration
                 </button>
               </form>
+
+              {/* Danger Zone */}
+              <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '1px solid rgba(255,23,68,0.2)' }}>
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ fontWeight: 700, fontSize: '13px', color: 'var(--danger)', marginBottom: '4px' }}>Danger Zone</div>
+                  <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Irreversible actions. Proceed with caution.</div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,23,68,0.05)', border: '1px solid rgba(255,23,68,0.2)', borderRadius: '10px', padding: '14px 16px' }}>
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: '13px', color: 'var(--text-primary)', marginBottom: '3px' }}>Reset Server Data</div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Delete all giveaways, entries, and settings for this server.</div>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: '7px' }}
+                    onClick={() => { setShowResetModal(true); setResetConfirmText(''); }}
+                  >
+                    <Trash2 size={13} /> Reset Data
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>
       </div>
 
+      {/* Reset Server Data Modal */}
+      {showResetModal && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }} onClick={() => setShowResetModal(false)}>
+          <div style={{ background: 'var(--bg-secondary)', border: '1px solid rgba(255,23,68,0.35)', borderRadius: '14px', padding: '28px', width: '440px', maxWidth: '94vw' }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,23,68,0.12)', border: '1px solid rgba(255,23,68,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Trash2 size={17} style={{ color: 'var(--danger)' }} />
+              </div>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: '15px' }}>Reset Server Data</div>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{guild?.name || guildId}</div>
+              </div>
+            </div>
+
+            <div style={{ background: 'rgba(255,23,68,0.06)', border: '1px solid rgba(255,23,68,0.2)', borderRadius: '8px', padding: '12px 14px', marginBottom: '20px', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+              <strong style={{ color: 'var(--danger)' }}>This action is irreversible.</strong> All bot data for this server will be permanently deleted — including all giveaways, entries, and settings.
+            </div>
+
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
+                Type <strong style={{ color: 'var(--danger)', fontFamily: 'monospace' }}>RESET</strong> to confirm
+              </label>
+              <input
+                className="form-input"
+                type="text"
+                placeholder="RESET"
+                value={resetConfirmText}
+                onChange={e => setResetConfirmText(e.target.value)}
+                style={{ width: '100%', borderColor: resetConfirmText === 'RESET' ? 'rgba(255,23,68,0.5)' : undefined }}
+                autoFocus
+              />
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button className="btn btn-secondary" style={{ flex: 1 }} onClick={() => setShowResetModal(false)}>Cancel</button>
+              <button
+                className="btn btn-danger"
+                style={{ flex: 1, opacity: resetConfirmText === 'RESET' ? 1 : 0.4 }}
+                disabled={resetConfirmText !== 'RESET' || resetLoading}
+                onClick={resetServer}
+              >
+                {resetLoading ? 'Resetting…' : 'Reset All Data'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

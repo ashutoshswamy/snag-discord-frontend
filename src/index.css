@@ -545,7 +545,7 @@ a:hover { color: var(--primary-light); }
   font-weight: 800;
   letter-spacing: 2px;
   margin-bottom: 10px;
-  color: var(--text-primary);
+  color: var(--primary);
   text-shadow: 0 0 32px var(--primary-glow);
 }
 
