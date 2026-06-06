@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from './App.jsx';
-import { 
-  Plus, Trophy, Clock, Inbox, Loader2, CheckCircle, AlertCircle, 
+import {
+  Plus, Trophy, Clock, Inbox, Loader2, CheckCircle, AlertCircle, X,
   LayoutDashboard, LogOut, ChevronDown, Menu, Home, RefreshCw, Server,
   BarChart3, Settings, Zap, ArrowRight, Shield, Award, Users, Trash2, Edit3,
   BookOpen, Gift, Hash
@@ -161,7 +161,7 @@ export default function GuildPage() {
   }
 
   async function handleEnd(messageId) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/giveaways/${messageId}`, { method: 'DELETE', credentials: 'include' });
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/giveaways/${messageId}?guildId=${guildId}`, { method: 'DELETE', credentials: 'include' });
     const data = await res.json();
     if (res.ok) {
       setGiveaways(prev => prev.map(g =>
@@ -178,7 +178,7 @@ export default function GuildPage() {
   }
 
   async function handleReroll(messageId) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/giveaways/${messageId}`, { method: 'PATCH', credentials: 'include' });
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/giveaways/${messageId}?guildId=${guildId}`, { method: 'PATCH', credentials: 'include' });
     const data = await res.json();
     if (res.ok) {
       showToast(data.winnerMentions?.length
