@@ -45,11 +45,9 @@ export default function DashboardPage() {
   return (
     <div className="selection-container">
       {/* Header */}
-      <div className="selection-header" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-        <div>
-          <h1>Select Server</h1>
-          <p>Choose which Discord server you want to manage giveaways for</p>
-        </div>
+      <div className="selection-header">
+        <h1>Select Server</h1>
+        <p>Choose which Discord server you want to manage giveaways for</p>
       </div>
 
       {error ? (

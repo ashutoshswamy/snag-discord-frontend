@@ -666,15 +666,15 @@ a:hover { color: var(--primary-light); }
 }
 
 .btn-setup {
-  background: rgba(139, 92, 246, 0.1);
-  color: var(--accent-hover);
-  border: 1px solid rgba(139, 92, 246, 0.25);
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-hover);
 }
 
 .btn-setup:hover {
-  background: rgba(139, 92, 246, 0.25);
-  border-color: rgba(139, 92, 246, 0.5);
-  box-shadow: 0 4px 18px var(--accent-glow);
+  background: rgba(139, 92, 246, 0.06);
+  border-color: rgba(139, 92, 246, 0.35);
+  color: var(--text-primary);
   transform: translateY(-1px);
 }
 

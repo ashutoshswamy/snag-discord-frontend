@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Link } from 'lucide-react';
 
 export default function GuildCard({ guild }) {
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ export default function GuildCard({ guild }) {
           rel="noopener noreferrer"
           style={{ textDecoration: 'none' }}
         >
-          Invite Bot <ChevronRight size={14} />
+          Invite Bot <Link size={14} />
         </a>
       )}
     </div>
