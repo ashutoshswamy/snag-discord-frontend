@@ -13,7 +13,7 @@ export default function DashboardPage() {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    fetch('/api/guilds', { credentials: 'include' })
+    fetch(`${import.meta.env.VITE_API_URL}/guilds`, { credentials: 'include' })
       .then(r => r.json())
       .then(data => {
         if (Array.isArray(data)) setGuilds(data);

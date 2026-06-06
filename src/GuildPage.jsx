@@ -85,10 +85,10 @@ export default function GuildPage() {
     setRefreshing(true);
     setChannelsLoading(true);
     Promise.all([
-      fetch('/api/guilds', { credentials: 'include' }).then(r => r.json()),
-      fetch(`/api/giveaways?guildId=${guildId}`, { credentials: 'include' }).then(r => r.json()),
-      fetch(`/api/channels/${guildId}`, { credentials: 'include' }).then(r => r.json()),
-      fetch(`/api/settings/${guildId}`, { credentials: 'include' }).then(r => r.json()),
+      fetch(`${import.meta.env.VITE_API_URL}/guilds`, { credentials: 'include' }).then(r => r.json()),
+      fetch(`${import.meta.env.VITE_API_URL}/giveaways?guildId=${guildId}`, { credentials: 'include' }).then(r => r.json()),
+      fetch(`${import.meta.env.VITE_API_URL}/channels/${guildId}`, { credentials: 'include' }).then(r => r.json()),
+      fetch(`${import.meta.env.VITE_API_URL}/settings/${guildId}`, { credentials: 'include' }).then(r => r.json()),
     ]).then(([guildsData, giveawaysData, channelsData, settingsData]) => {
       if (!Array.isArray(guildsData)) { navigate('/dashboard'); return; }
       setGuilds(guildsData);
@@ -131,7 +131,7 @@ export default function GuildPage() {
   }
 
   async function handleEnd(messageId) {
-    const res = await fetch(`/api/giveaways/${messageId}`, { method: 'DELETE', credentials: 'include' });
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/giveaways/${messageId}`, { method: 'DELETE', credentials: 'include' });
     const data = await res.json();
     if (res.ok) {
       setGiveaways(prev => prev.map(g =>
@@ -148,7 +148,7 @@ export default function GuildPage() {
   }
 
   async function handleReroll(messageId) {
-    const res = await fetch(`/api/giveaways/${messageId}`, { method: 'PATCH', credentials: 'include' });
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/giveaways/${messageId}`, { method: 'PATCH', credentials: 'include' });
     const data = await res.json();
     if (res.ok) {
       showToast(data.winnerMentions?.length
@@ -164,7 +164,7 @@ export default function GuildPage() {
     setGiveawaySubmitting(true);
     setGiveawayError(null);
     try {
-      const res = await fetch('/api/giveaways', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/giveaways`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -188,7 +188,7 @@ export default function GuildPage() {
     setDropSubmitting(true);
     setDropError(null);
     try {
-      const res = await fetch('/api/giveaways', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/giveaways`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -216,7 +216,7 @@ export default function GuildPage() {
   const saveSettings = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`/api/settings/${guildId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/settings/${guildId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

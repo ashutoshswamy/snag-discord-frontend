@@ -25,7 +25,7 @@ export default function CreateGiveawayModal({ guildId, onClose, onCreated, initi
   const set = useCallback((key, val) => setForm(f => ({ ...f, [key]: val })), []);
 
   useEffect(() => {
-    fetch(`/api/channels/${guildId}`, { credentials: 'include' })
+    fetch(`${import.meta.env.VITE_API_URL}/channels/${guildId}`, { credentials: 'include' })
       .then(r => r.json())
       .then(data => {
         if (Array.isArray(data)) {
@@ -44,7 +44,7 @@ export default function CreateGiveawayModal({ guildId, onClose, onCreated, initi
     setSubmitting(true);
     setError(null);
     try {
-      const res = await fetch('/api/giveaways', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/giveaways`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
