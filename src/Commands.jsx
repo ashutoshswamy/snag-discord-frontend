@@ -78,6 +78,24 @@ const COMMANDS = [
     admin: false,
     dashboard: false,
   },
+  {
+    name: 'ping',
+    category: 'management',
+    desc: "Check the bot's WebSocket latency and Discord API response time to verify service health.",
+    usage: '/ping',
+    options: [],
+    admin: false,
+    dashboard: false,
+  },
+  {
+    name: 'help',
+    category: 'management',
+    desc: "Shows a comprehensive manual of all available Snag slash commands, dynamic manager permissions, and custom guild configurations.",
+    usage: '/help',
+    options: [],
+    admin: false,
+    dashboard: false,
+  },
 ];
 
 const CAT_COLORS = {
