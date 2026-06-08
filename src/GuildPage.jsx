@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from './App.jsx';
 import {
   Plus, Trophy, Clock, Inbox, Loader2, CheckCircle, AlertCircle, X,
@@ -28,10 +28,14 @@ function Toast({ toast }) {
   );
 }
 
+const SNOWFLAKE_RE = /^\d{17,20}$/;
+
 export default function GuildPage() {
   const { guildId } = useParams();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+
+  if (!SNOWFLAKE_RE.test(guildId ?? '')) return <Navigate to="/" replace />;
 
   const [guild, setGuild] = useState(null);
   const [guilds, setGuilds] = useState([]);
