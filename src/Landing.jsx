@@ -329,6 +329,7 @@ export default function Landing() {
             <a href="#features">Features</a>
             <a href="#how">How it works</a>
             <RouterLink to="/commands">Commands</RouterLink>
+            <RouterLink to="/guide">Guide</RouterLink>
           </nav>
 
           <div className="lp-nav-ctas">
@@ -357,6 +358,7 @@ export default function Landing() {
             <a href="#features" onClick={() => setMobileMenuOpen(false)}>Features</a>
             <a href="#how" onClick={() => setMobileMenuOpen(false)}>How it works</a>
             <RouterLink to="/commands" onClick={() => setMobileMenuOpen(false)}>Commands</RouterLink>
+            <RouterLink to="/guide" onClick={() => setMobileMenuOpen(false)}>Guide</RouterLink>
             <a
               href={inviteUrl}
               target="_blank"

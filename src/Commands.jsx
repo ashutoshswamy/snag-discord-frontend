@@ -289,6 +289,7 @@ export default function Commands() {
         </Link>
         <div className="cmd-nav-right">
           <span className="cmd-nav-count">{COMMANDS.length} commands</span>
+          <Link to="/guide" className="cmd-nav-link">Guide</Link>
           <Link to="/" className="cmd-nav-link">← Back to Home</Link>
           {user && (
             <Link to="/dashboard" className="cmd-nav-link" style={{ marginLeft: '16px' }}>

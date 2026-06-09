@@ -94,6 +94,7 @@ export default function Guide() {
           <span className="guide-nav-name">SNAG</span>
         </Link>
         <div className="guide-nav-right">
+          <Link to="/guide" className="guide-nav-link active">Guide</Link>
           <Link to="/commands" className="guide-nav-link">Commands</Link>
           <Link to="/" className="guide-nav-link">← Home</Link>
         </div>
