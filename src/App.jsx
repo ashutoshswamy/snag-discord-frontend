@@ -4,6 +4,7 @@ import Landing from './Landing.jsx';
 import DashboardPage from './DashboardPage.jsx';
 import GuildPage from './GuildPage.jsx';
 import Commands from './Commands.jsx';
+import Guide from './Guide.jsx';
 import PrivacyPolicy from './PrivacyPolicy.jsx';
 import TermsOfService from './TermsOfService.jsx';
 import Status from './Status.jsx';
@@ -73,6 +74,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/commands" element={<Commands />} />
+        <Route path="/guide" element={<Guide />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
         <Route path="/status" element={<Status />} />

@@ -16,7 +16,7 @@ export default function Footer({ onDashboard }) {
             </div>
             <p className="lp-footer-tagline">Automated Discord giveaways<br />and drop events, around the clock.</p>
             <a href={inviteUrl} target="_blank" rel="noreferrer" className="lp-btn lp-btn-primary" style={{ marginTop: '20px', fontSize: '13px', padding: '9px 18px' }}>
-              Invite for Free
+              Invite Bot
             </a>
           </div>
 
@@ -31,7 +31,7 @@ export default function Footer({ onDashboard }) {
             </div>
             <div className="lp-footer-col">
               <p className="lp-footer-col-heading">Access</p>
-              <a href={inviteUrl} target="_blank" rel="noreferrer">Add to Discord</a>
+              <a href={inviteUrl} target="_blank" rel="noreferrer">Invite Bot</a>
               {onDashboard
                 ? <button onClick={onDashboard}>Dashboard</button>
                 : <RouterLink to="/dashboard">Dashboard</RouterLink>
