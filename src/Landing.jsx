@@ -394,7 +394,7 @@ export default function Landing() {
             </div>
 
             <h1 className="lp-hero-title">
-              The <span className="lp-hero-title-accent">Giveaway Bot</span><br />
+              <span style={{ whiteSpace: 'nowrap' }}>The <span className="lp-hero-title-accent">Giveaway Bot</span></span><br />
               Your Server's Been<br />
               Waiting For.
             </h1>
